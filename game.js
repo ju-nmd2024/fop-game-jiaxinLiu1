@@ -32,7 +32,9 @@ function gameScreen() {
   character(x + 600, y - 100);
   cloud(x - 100, 50);
 
-  if (y >= 900) {
+  if (y >= 900 && speed <= minSpeed) {
+    state = "win";
+  } else if (y >= 900) {
     state = "end";
   } else {
     if (keyIsDown(32)) {
@@ -58,6 +60,20 @@ function endScreen() {
   text("Restart", 300, 300);
 }
 
+function winScreen() {
+  background(180, 240, 180);
+  textSize(50);
+  fill(255, 255, 255);
+  text("You win!🎉", 200, 150);
+
+  //button
+  fill(255, 255, 255);
+  rect(250, 270, 200, 50, 10);
+  fill(0);
+  textSize(25);
+  text("Restart", 300, 300);
+}
+
 function resetGame() {
   y = 300;
   speed = startSpeed;
@@ -70,13 +86,15 @@ function draw() {
     gameScreen();
   } else if (state === "end") {
     endScreen();
+  } else if (state === "win") {
+    winScreen();
   }
 }
 
 function mousePressed() {
   if (state === "start") {
     state = "game";
-  } else if (state === "end") {
+  } else if (state === "end" || state === "win") {
     if (mouseX > 250 && mouseX < 450 && mouseY > 270 && mouseY < 320) {
       resetGame();
       state = "game";
